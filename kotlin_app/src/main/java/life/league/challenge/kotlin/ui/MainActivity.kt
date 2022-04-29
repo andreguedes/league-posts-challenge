@@ -1,4 +1,4 @@
-package life.league.challenge.kotlin.main
+package life.league.challenge.kotlin.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import life.league.challenge.kotlin.api.Service
-import life.league.challenge.kotlin.api.login
+import life.league.challenge.kotlin.data.remote.Service
+import life.league.challenge.kotlin.data.remote.login
 import life.league.challenge.kotlin.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

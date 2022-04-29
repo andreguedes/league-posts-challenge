@@ -1,4 +1,4 @@
-package life.league.challenge.kotlin.api
+package life.league.challenge.kotlin.data.remote
 
 import life.league.challenge.kotlin.BuildConfig
 import retrofit2.Retrofit

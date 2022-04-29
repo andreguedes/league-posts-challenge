@@ -1,6 +1,6 @@
-package life.league.challenge.kotlin.api
+package life.league.challenge.kotlin.data.remote
 
-import life.league.challenge.kotlin.model.Account
+import life.league.challenge.kotlin.data.model.Account
 import retrofit2.http.GET
 import retrofit2.http.Header
 
