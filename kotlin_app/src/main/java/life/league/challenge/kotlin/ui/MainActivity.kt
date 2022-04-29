@@ -3,11 +3,6 @@ package life.league.challenge.kotlin.ui
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import life.league.challenge.kotlin.data.remote.Service
-import life.league.challenge.kotlin.data.remote.login
 import life.league.challenge.kotlin.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +13,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val viewModel = MainViewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -27,14 +24,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // example api call to login, feel free to delete this and implement the call to login
-        // somewhere else differently depending on your chosen architecture
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val account = Service.api.login("hello", "world")
-                Log.v(TAG, account.apiKey ?: "")
-            } catch (t : Throwable) {
-                Log.e(TAG, t.message, t)
+        viewModel.login()
+        viewModel.viewState.observe(this) {
+            when (it) {
+                is MainViewState.Success -> Log.v(TAG, it.account)
+                is MainViewState.Error -> Log.e(TAG, it.message, it.t)
             }
         }
     }
