@@ -14,10 +14,15 @@ class MainViewModel : ViewModel() {
     private val state = MutableLiveData<MainViewState>()
     val viewState: LiveData<MainViewState> = state
 
+    private var isLoadingAccount: Boolean = true
+
+    fun isLoadingAccount() = isLoadingAccount
+
     fun login() {
         viewModelScope.launch {
             state.value = try {
                 val account = repository.login("hello", "world")
+                isLoadingAccount = false
                 MainViewState.Success(account.apiKey ?: "")
             } catch (t: Throwable) {
                 MainViewState.Error(t.message, t)
