@@ -21,7 +21,7 @@ class MainViewModel : ViewModel() {
     fun login() {
         viewModelScope.launch {
             state.value = try {
-                val account = repository.login("hello", "world")
+                val account = repository.login()
                 isLoadingAccount = false
                 MainViewState.Success(account.apiKey ?: "")
             } catch (t: Throwable) {
