@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import life.league.challenge.kotlin.data.remote.Service
+import life.league.challenge.kotlin.data.repository.Repository
 import life.league.challenge.kotlin.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +16,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel = MainViewModel()
+    private val service = Service
+    private val repository = Repository(service)
+    private val viewModel = MainViewModel(repository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().setKeepOnScreenCondition {

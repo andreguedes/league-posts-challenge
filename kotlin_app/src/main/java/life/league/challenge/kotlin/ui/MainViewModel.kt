@@ -7,9 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.data.repository.Repository
 
-class MainViewModel : ViewModel() {
-
-    private val repository by lazy { Repository() }
+class MainViewModel(private val repository: Repository) : ViewModel() {
 
     private val state = MutableLiveData<MainViewState>()
     val viewState: LiveData<MainViewState> = state
