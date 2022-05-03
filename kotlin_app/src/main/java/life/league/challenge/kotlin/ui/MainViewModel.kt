@@ -21,7 +21,18 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             state.value = try {
                 val account = repository.login()
                 isLoadingAccount = false
-                MainViewState.Success(account.apiKey ?: "")
+                MainViewState.LoginSuccess(account.apiKey ?: "")
+            } catch (t: Throwable) {
+                MainViewState.Error(t.message, t)
+            }
+        }
+    }
+
+    fun posts(account: String) {
+        viewModelScope.launch {
+            state.value = try {
+                val posts = repository.posts(account)
+                MainViewState.PostsSuccess(posts)
             } catch (t: Throwable) {
                 MainViewState.Error(t.message, t)
             }

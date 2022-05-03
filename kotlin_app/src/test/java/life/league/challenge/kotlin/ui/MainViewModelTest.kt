@@ -39,7 +39,7 @@ class MainViewModelTest {
     @Test
     fun shouldReturnAccountApiKeyWhenViewModelLoginExposeViewStateWithSuccess() {
         val accountResponse = PostsMock.getAccount()
-        val expectedViewStateResponse = MainViewState.Success(accountResponse.apiKey!!)
+        val expectedViewStateResponse = MainViewState.LoginSuccess(accountResponse.apiKey!!)
 
         coEvery { repositoryMock.login() } returns accountResponse
 
@@ -72,6 +72,30 @@ class MainViewModelTest {
         shouldReturnErrorMessageWhenViewModelLoginExposeViewStateWithError()
 
         assertTrue(viewModel.isLoadingAccount())
+    }
+
+    @Test
+    fun shouldReturnPostsListWhenViewModelPostsExposeViewStateWithSuccess() {
+        val postsResponse = PostsMock.getPosts()
+        val expectedViewStateResponse = MainViewState.PostsSuccess(postsResponse)
+
+        coEvery { repositoryMock.posts(any()) } returns postsResponse
+
+        viewModel.posts(PostsMock.getAccount().apiKey!!)
+
+        assertEquals(expectedViewStateResponse, viewModel.viewState.value)
+    }
+
+    @Test
+    fun shouldReturnErrorMessageWhenViewModelPostsExposeViewStateWithError() {
+        val errorResponse = Throwable("Unknown error")
+        val expectedViewStateResponse = MainViewState.Error(errorResponse.message, errorResponse)
+
+        coEvery { repositoryMock.posts(any()) } throws errorResponse
+
+        viewModel.posts(PostsMock.getAccount().apiKey!!)
+
+        assertEquals(expectedViewStateResponse, viewModel.viewState.value)
     }
 
     @After

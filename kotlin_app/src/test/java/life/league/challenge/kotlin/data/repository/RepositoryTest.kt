@@ -37,6 +37,16 @@ class RepositoryTest {
         assertEquals(accountResponse, currentResponse)
     }
 
+    @Test
+    fun shouldReturnPostsListWhenRepositoryPostsExposeObjectWithSuccess() = runBlocking {
+        val postsReponse = PostsMock.getPosts()
+
+        coEvery { apiMock.posts(any()) } returns postsReponse
+
+        val currentResponse = repository.posts(PostsMock.getAccount().apiKey!!)
+        assertEquals(postsReponse, currentResponse)
+    }
+
     @After
     fun clear() {
         clearMocks(serviceMock, apiMock)

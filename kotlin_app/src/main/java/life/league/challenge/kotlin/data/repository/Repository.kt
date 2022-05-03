@@ -4,6 +4,10 @@ import life.league.challenge.kotlin.data.service.Service
 
 class Repository(private val service: Service) {
 
-    suspend fun login() = service.getService().login()
+    suspend fun login() = getService().login()
+
+    suspend fun posts(account: String) = getService().posts(account)
+
+    private fun getService() = service.getService()
 
 }
