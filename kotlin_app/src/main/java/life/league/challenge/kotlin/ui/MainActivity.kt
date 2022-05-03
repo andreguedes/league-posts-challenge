@@ -1,20 +1,19 @@
 package life.league.challenge.kotlin.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import life.league.challenge.kotlin.data.model.Post
 import life.league.challenge.kotlin.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        private const val TAG = "MainActivity"
-    }
-
     private lateinit var binding: ActivityMainBinding
+    private val adapterPosts by lazy { PostsAdapter() }
 
     private val viewModel: MainViewModel by viewModel()
 
@@ -33,13 +32,24 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        binding.recyclerviewPosts.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = adapterPosts
+            addItemDecoration(
+                DividerItemDecoration(
+                    this@MainActivity,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
+
         viewModel.viewState.observe(this) {
             when (it) {
                 is MainViewState.LoginSuccess -> {
                     getPosts(it.account)
                 }
                 is MainViewState.PostsSuccess -> {
-                    Log.v(TAG, it.posts.toString())
+                    updatePosts(it.posts)
                 }
                 is MainViewState.Error -> {
                     showErrorMessage(it.t)
@@ -49,12 +59,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getPosts(account: String) {
-        Log.v(TAG, account)
         viewModel.posts(account)
     }
 
+    private fun updatePosts(posts: List<Post>) {
+        adapterPosts.updatePosts(posts)
+    }
+
     private fun showErrorMessage(t: Throwable) {
-        Log.e(TAG, t.message, t)
         Toast.makeText(this, t.message, Toast.LENGTH_SHORT).show()
     }
 
