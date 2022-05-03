@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import life.league.challenge.kotlin.data.model.Post
+import life.league.challenge.kotlin.data.model.ui.PostsUIModel
 import life.league.challenge.kotlin.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,22 +52,22 @@ class MainActivity : AppCompatActivity() {
                     updatePosts(it.posts)
                 }
                 is MainViewState.Error -> {
-                    showErrorMessage(it.t)
+                    showErrorMessage()
                 }
             }
         }
     }
 
     private fun getPosts(account: String) {
-        viewModel.posts(account)
+        viewModel.postsFromUsers(account)
     }
 
-    private fun updatePosts(posts: List<Post>) {
+    private fun updatePosts(posts: List<PostsUIModel>) {
         adapterPosts.updatePosts(posts)
     }
 
-    private fun showErrorMessage(t: Throwable) {
-        Toast.makeText(this, t.message, Toast.LENGTH_SHORT).show()
+    private fun showErrorMessage() {
+        Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show()
     }
 
 }

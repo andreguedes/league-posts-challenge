@@ -8,6 +8,8 @@ class Repository(private val service: Service) {
 
     suspend fun posts(account: String) = getService().posts(account)
 
+    suspend fun users(account: String) = getService().users(account)
+
     private fun getService() = service.getService()
 
 }

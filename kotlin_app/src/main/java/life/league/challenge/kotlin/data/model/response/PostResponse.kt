@@ -1,8 +1,8 @@
-package life.league.challenge.kotlin.data.model
+package life.league.challenge.kotlin.data.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class Post(
+data class PostResponse(
     @SerializedName("userId") val userId: Int,
     @SerializedName("id") val id: Int,
     @SerializedName("title") val title: String,

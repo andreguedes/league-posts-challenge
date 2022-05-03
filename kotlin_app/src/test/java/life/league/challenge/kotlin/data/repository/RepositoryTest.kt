@@ -12,6 +12,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import retrofit2.Response
 
 class RepositoryTest {
 
@@ -31,20 +32,30 @@ class RepositoryTest {
     fun shouldReturnAccountApiKeyWhenRepositoryLoginExposeObjectWithSuccess() = runBlocking {
         val accountResponse = PostsMock.getAccount()
 
-        coEvery { apiMock.login() } returns accountResponse
+        coEvery { apiMock.login() } returns Response.success(accountResponse)
 
         val currentResponse = repository.login()
-        assertEquals(accountResponse, currentResponse)
+        assertEquals(accountResponse, currentResponse.body())
     }
 
     @Test
     fun shouldReturnPostsListWhenRepositoryPostsExposeObjectWithSuccess() = runBlocking {
         val postsReponse = PostsMock.getPosts()
 
-        coEvery { apiMock.posts(any()) } returns postsReponse
+        coEvery { apiMock.posts(any()) } returns Response.success(postsReponse)
 
         val currentResponse = repository.posts(PostsMock.getAccount().apiKey!!)
-        assertEquals(postsReponse, currentResponse)
+        assertEquals(postsReponse, currentResponse.body())
+    }
+
+    @Test
+    fun shouldReturnUsersListWhenRepositoryPostsExposeObjectWithSuccess() = runBlocking {
+        val usersReponse = PostsMock.getUsers()
+
+        coEvery { apiMock.users(any()) } returns Response.success(usersReponse)
+
+        val currentResponse = repository.users(PostsMock.getAccount().apiKey!!)
+        assertEquals(usersReponse, currentResponse.body())
     }
 
     @After
