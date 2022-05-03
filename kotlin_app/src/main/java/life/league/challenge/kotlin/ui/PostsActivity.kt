@@ -7,15 +7,15 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import life.league.challenge.kotlin.data.model.ui.PostsUIModel
-import life.league.challenge.kotlin.databinding.ActivityMainBinding
+import life.league.challenge.kotlin.databinding.ActivityPostsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class PostsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityPostsBinding
     private val adapterPosts by lazy { PostsAdapter() }
 
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: PostsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().setKeepOnScreenCondition {
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityPostsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel.login()
@@ -33,11 +33,11 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         binding.recyclerviewPosts.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(this@PostsActivity)
             adapter = adapterPosts
             addItemDecoration(
                 DividerItemDecoration(
-                    this@MainActivity,
+                    this@PostsActivity,
                     DividerItemDecoration.VERTICAL
                 )
             )
@@ -45,13 +45,13 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.viewState.observe(this) {
             when (it) {
-                is MainViewState.LoginSuccess -> {
+                is PostsViewState.LoginSuccess -> {
                     getPosts(it.account)
                 }
-                is MainViewState.PostsSuccess -> {
+                is PostsViewState.PostsSuccess -> {
                     updatePosts(it.posts)
                 }
-                is MainViewState.Error -> {
+                is PostsViewState.Error -> {
                     showErrorMessage()
                 }
             }

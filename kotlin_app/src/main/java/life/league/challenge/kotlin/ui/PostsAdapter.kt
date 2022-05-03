@@ -3,6 +3,7 @@ package life.league.challenge.kotlin.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import life.league.challenge.kotlin.data.model.ui.PostsUIModel
 import life.league.challenge.kotlin.databinding.ItemRecyclerviewPostBinding
 
@@ -32,6 +33,11 @@ class PostsAdapter : RecyclerView.Adapter<PostsAdapter.PostsViewHolder>() {
 
         fun bind(post: PostsUIModel) {
             with(binding) {
+                Glide.with(this.root)
+                    .load(post.user.thumbnailUrl)
+                    .circleCrop()
+                    .into(postUserThumbanail)
+                postUserName.text = post.user.name
                 postTitle.text = post.title
                 postBody.text = post.body
             }

@@ -23,14 +23,14 @@ import org.junit.Test
 import retrofit2.Response
 
 @ExperimentalCoroutinesApi
-class MainViewModelTest {
+class PostsViewModelTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
     private val dispatcher = UnconfinedTestDispatcher()
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: PostsViewModel
 
     private val repositoryMock = mockk<Repository>()
 
@@ -38,13 +38,13 @@ class MainViewModelTest {
     fun setup() {
         Dispatchers.setMain(dispatcher)
 
-        viewModel = MainViewModel(repositoryMock)
+        viewModel = PostsViewModel(repositoryMock)
     }
 
     @Test
     fun shouldReturnAccountApiKeyWhenViewModelLoginExposeViewStateWithSuccess() {
         val accountResponse = PostsMock.getAccount()
-        val expectedViewStateResponse = MainViewState.LoginSuccess(accountResponse.apiKey!!)
+        val expectedViewStateResponse = PostsViewState.LoginSuccess(accountResponse.apiKey!!)
 
         coEvery { repositoryMock.login() } returns Response.success(accountResponse)
 
@@ -57,7 +57,7 @@ class MainViewModelTest {
     fun shouldReturnErrorMessageWhenViewModelLoginExposeViewStateWithError() {
         val mockBody = "{\"message\":\"Unknown error\"}".toResponseBody("application/json".toMediaTypeOrNull())
         val errorResponse = Response.error<AccountResponse>(401, mockBody)
-        val expectedViewStateResponse = MainViewState.Error
+        val expectedViewStateResponse = PostsViewState.Error
 
         coEvery { repositoryMock.login() } returns errorResponse
 
@@ -86,7 +86,7 @@ class MainViewModelTest {
         val usersResponse = PostsMock.getUsers()
         val postsFromUsersResponse = PostsMock.getPostsFromUsers()
 
-        val expectedViewStateResponse = MainViewState.PostsSuccess(postsFromUsersResponse)
+        val expectedViewStateResponse = PostsViewState.PostsSuccess(postsFromUsersResponse)
 
         coEvery { repositoryMock.posts(any()) } returns Response.success(postsResponse)
         coEvery { repositoryMock.users(any()) } returns Response.success(usersResponse)
@@ -100,7 +100,7 @@ class MainViewModelTest {
     fun shouldReturnErrorMessageWhenViewModelPostsExposeViewStateWithError() {
         val mockBody = "{\"message\":\"Unknown error\"}".toResponseBody("application/json".toMediaTypeOrNull())
         val errorResponse = Response.error<List<PostResponse>>(401, mockBody)
-        val expectedViewStateResponse = MainViewState.Error
+        val expectedViewStateResponse = PostsViewState.Error
 
         coEvery { repositoryMock.posts(any()) } returns errorResponse
 

@@ -10,10 +10,10 @@ import life.league.challenge.kotlin.data.model.ui.PostsUIModel
 import life.league.challenge.kotlin.data.model.ui.UserUIModel
 import life.league.challenge.kotlin.data.repository.Repository
 
-class MainViewModel(private val repository: Repository) : ViewModel() {
+class PostsViewModel(private val repository: Repository) : ViewModel() {
 
-    private val state = MutableLiveData<MainViewState>()
-    val viewState: LiveData<MainViewState> = state
+    private val state = MutableLiveData<PostsViewState>()
+    val viewState: LiveData<PostsViewState> = state
 
     private var isLoadingAccount: Boolean = true
 
@@ -27,10 +27,10 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
                 if (account.isSuccessful) {
                     isLoadingAccount = false
                     accountApiKey = account.body()?.apiKey
-                    MainViewState.LoginSuccess(accountApiKey ?: "")
-                } else MainViewState.Error
+                    PostsViewState.LoginSuccess(accountApiKey ?: "")
+                } else PostsViewState.Error
             } catch (t: Throwable) {
-                MainViewState.Error
+                PostsViewState.Error
             }
         }
     }
@@ -57,10 +57,10 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
                             }
                         }
                     }
-                    MainViewState.PostsSuccess(postsFromUsers)
-                } else MainViewState.Error
+                    PostsViewState.PostsSuccess(postsFromUsers)
+                } else PostsViewState.Error
             } catch (t: Throwable) {
-                MainViewState.Error
+                PostsViewState.Error
             }
         }
     }
