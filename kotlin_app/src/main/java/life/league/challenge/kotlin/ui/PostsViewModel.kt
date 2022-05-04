@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import life.league.challenge.kotlin.data.model.ui.PostsUIModel
 import life.league.challenge.kotlin.data.model.ui.UserUIModel
 import life.league.challenge.kotlin.data.repository.Repository
@@ -40,14 +39,8 @@ class PostsViewModel(private val repository: Repository) : ViewModel() {
             state.value = try {
                 val postsFromUsers = mutableListOf<PostsUIModel>()
 
-                val postsResponse =
-                    withContext(Dispatchers.Default) {
-                        repository.posts(account)
-                    }
-                val usersResponse =
-                    withContext(Dispatchers.Default) {
-                        repository.users(account)
-                    }
+                val postsResponse = async { repository.posts(account) }.await()
+                val usersResponse = async { repository.users(account) }.await()
 
                 if (postsResponse.isSuccessful && usersResponse.isSuccessful) {
                     postsResponse.body().let { posts ->
