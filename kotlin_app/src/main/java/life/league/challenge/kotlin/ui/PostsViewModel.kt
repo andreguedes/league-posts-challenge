@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import life.league.challenge.kotlin.data.model.ui.PostsUIModel
 import life.league.challenge.kotlin.data.model.ui.UserUIModel
 import life.league.challenge.kotlin.data.repository.Repository
@@ -22,11 +23,10 @@ class PostsViewModel(private val repository: Repository) : ViewModel() {
     fun login() {
         viewModelScope.launch {
             state.value = try {
-                var accountApiKey: String? = null
                 val account = repository.login()
                 if (account.isSuccessful) {
                     isLoadingAccount = false
-                    accountApiKey = account.body()?.apiKey
+                    val accountApiKey = account.body()?.apiKey
                     PostsViewState.LoginSuccess(accountApiKey ?: "")
                 } else PostsViewState.Error
             } catch (t: Throwable) {
@@ -40,8 +40,14 @@ class PostsViewModel(private val repository: Repository) : ViewModel() {
             state.value = try {
                 val postsFromUsers = mutableListOf<PostsUIModel>()
 
-                val postsResponse = async { repository.posts(account) }.await()
-                val usersResponse = async { repository.users(account) }.await()
+                val postsResponse =
+                    withContext(Dispatchers.Default) {
+                        repository.posts(account)
+                    }
+                val usersResponse =
+                    withContext(Dispatchers.Default) {
+                        repository.users(account)
+                    }
 
                 if (postsResponse.isSuccessful && usersResponse.isSuccessful) {
                     postsResponse.body().let { posts ->
