@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import life.league.challenge.kotlin.R
 import life.league.challenge.kotlin.data.model.ui.PostsUIModel
 import life.league.challenge.kotlin.databinding.ActivityPostsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -67,7 +68,7 @@ class PostsActivity : AppCompatActivity() {
     }
 
     private fun showErrorMessage() {
-        Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.unknown_error), Toast.LENGTH_SHORT).show()
     }
 
 }
