@@ -7,7 +7,3 @@ data class UserResponse(
     @SerializedName("avatar") val avatar: UserAvatarResponse,
     @SerializedName("name") val name: String
 )
-
-data class UserAvatarResponse(
-    @SerializedName("thumbnail") val thumbnailUrl: String
-)
