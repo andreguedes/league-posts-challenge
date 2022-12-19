@@ -104,7 +104,6 @@ class PostsViewModelTest {
 
         coEvery { repositoryMock.posts(any()) } returns errorResponse
 
-
         viewModel.postsFromUsers(PostsMock.getAccount().apiKey!!)
 
         assertEquals(expectedViewStateResponse, viewModel.viewState.value)
